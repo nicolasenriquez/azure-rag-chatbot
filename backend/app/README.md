@@ -36,7 +36,7 @@ backend/
 ├── .gitignore                        # Archivos ignorados por Git  
 ├── requirements.txt                  # Dependencias del proyecto  
 ├── README.md                         # Documentación del proyecto  
-
+```
 
 ## Requisitos  
 - **Python 3.11 o superior**  
