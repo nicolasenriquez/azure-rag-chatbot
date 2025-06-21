@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot - Integration Test</title>
+    <style>
+        body {
+            font-family: 'SF Pro Display', sans-serif;
+            background: #0F0F1A;
+            color: #FFFFFF;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .test-section {
+            background: #1E1E2F;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .test-button {
+            background: #6A5ACD;
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        .test-button:hover {
+            background: #8A7FD1;
+        }
+        .test-result {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { border-left: 4px solid #4CAF50; }
+        .error { border-left: 4px solid #f44336; }
+        .warning { border-left: 4px solid #ff9800; }
+    </style>
+</head>
+<body>
+    <h1>AI Chatbot - Backend Integration Test</h1>
+    
+    <div class="test-section">
+        <h2>API Health Check</h2>
+        <button class="test-button" onclick="testHealth()">Test Health Endpoint</button>
+        <div id="health-result" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Chat API Test</h2>
+        <input type="text" id="test-message" placeholder="Enter test message..." 
+               style="width: 300px; padding: 10px; border-radius: 8px; border: 1px solid #6A5ACD; background: #1E1E2F; color: #FFFFFF; margin-right: 10px;">
+        <button class="test-button" onclick="testChat()">Send Test Message</button>
+        <div id="chat-result" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Chat History Test</h2>
+        <input type="text" id="session-id" placeholder="Enter session ID..." 
+               style="width: 300px; padding: 10px; border-radius: 8px; border: 1px solid #6A5ACD; background: #1E1E2F; color: #FFFFFF; margin-right: 10px;">
+        <button class="test-button" onclick="testHistory()">Get History</button>
+        <div id="history-result" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Stats API Test</h2>
+        <button class="test-button" onclick="testStats()">Get Stats</button>
+        <div id="stats-result" class="test-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Frontend Integration</h2>
+        <button class="test-button" onclick="openChatbot()">Open Chatbot Interface</button>
+        <p>This will open the main chatbot interface in a new tab.</p>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        async function testHealth() {
+            const resultDiv = document.getElementById('health-result');
+            resultDiv.innerHTML = 'Testing...';
+            resultDiv.className = 'test-result';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `✅ Health Check Passed\n\n${JSON.stringify(data, null, 2)}`;
+                    resultDiv.className = 'test-result success';
+                } else {
+                    resultDiv.innerHTML = `❌ Health Check Failed\n\nStatus: ${response.status}\n${JSON.stringify(data, null, 2)}`;
+                    resultDiv.className = 'test-result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Health Check Error\n\n${error.message}`;
+                resultDiv.className = 'test-result error';
+            }
+        }
+
+        async function testChat() {
+            const message = document.getElementById('test-message').value;
+            const resultDiv = document.getElementById('chat-result');
+            
+            if (!message) {
+                resultDiv.innerHTML = '⚠️ Please enter a test message';
+                resultDiv.className = 'test-result warning';
+                return;
+            }
+
+            resultDiv.innerHTML = 'Testing...';
+            resultDiv.className = 'test-result';
+
+            try {
+                const payload = {
+                    session_id: 'test_session_' + Date.now(),
+                    user_question: message
+                };
+
+                const response = await fetch(`${API_BASE}/api/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `✅ Chat API Test Passed\n\nRequest: ${JSON.stringify(payload, null, 2)}\n\nResponse: ${JSON.stringify(data, null, 2)}`;
+                    resultDiv.className = 'test-result success';
+                } else {
+                    resultDiv.innerHTML = `❌ Chat API Test Failed\n\nStatus: ${response.status}\n${JSON.stringify(data, null, 2)}`;
+                    resultDiv.className = 'test-result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Chat API Test Error\n\n${error.message}`;
+                resultDiv.className = 'test-result error';
+            }
+        }
+
+        async function testHistory() {
+            const sessionId = document.getElementById('session-id').value;
+            const resultDiv = document.getElementById('history-result');
+            
+            if (!sessionId) {
+                resultDiv.innerHTML = '⚠️ Please enter a session ID';
+                resultDiv.className = 'test-result warning';
+                return;
+            }
+
+            resultDiv.innerHTML = 'Testing...';
+            resultDiv.className = 'test-result';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/chat/history/${sessionId}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `✅ History API Test Passed\n\nSession ID: ${sessionId}\n\nResponse: ${JSON.stringify(data, null, 2)}`;
+                    resultDiv.className = 'test-result success';
+                } else {
+                    resultDiv.innerHTML = `❌ History API Test Failed\n\nStatus: ${response.status}\n${JSON.stringify(data, null, 2)}`;
+                    resultDiv.className = 'test-result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ History API Test Error\n\n${error.message}`;
+                resultDiv.className = 'test-result error';
+            }
+        }
+
+        async function testStats() {
+            const resultDiv = document.getElementById('stats-result');
+            resultDiv.innerHTML = 'Testing...';
+            resultDiv.className = 'test-result';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/chat/stats`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.innerHTML = `✅ Stats API Test Passed\n\n${JSON.stringify(data, null, 2)}`;
+                    resultDiv.className = 'test-result success';
+                } else {
+                    resultDiv.innerHTML = `❌ Stats API Test Failed\n\nStatus: ${response.status}\n${JSON.stringify(data, null, 2)}`;
+                    resultDiv.className = 'test-result error';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ Stats API Test Error\n\n${error.message}`;
+                resultDiv.className = 'test-result error';
+            }
+        }
+
+        function openChatbot() {
+            window.open('index.html', '_blank');
+        }
+
+        // Auto-test health on page load
+        window.addEventListener('load', () => {
+            setTimeout(testHealth, 1000);
+        });
+    </script>
+</body>
+</html> 

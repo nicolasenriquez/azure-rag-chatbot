@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6A5ACD">
+    <meta name="description" content="A modern AI chatbot interface for seamless conversations">
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen active">
+        <div class="welcome-container">
+            <div class="welcome-header">
+                <h1 class="welcome-title">Best Personal AI Assistant</h1>
+                <p class="welcome-subtitle">Nice to meet you! How can I help you?</p>
+            </div>
+            <div class="welcome-illustration">
+                <i class="fas fa-robot robot-icon"></i>
+            </div>
+            <button id="start-chat-btn" class="primary-button">
+                <i class="fas fa-comments"></i>
+                Let's start chatting
+            </button>
+        </div>
+    </div>
+
+    <!-- Chat Screen -->
+    <div id="chat-screen" class="screen">
+        <div class="chat-container">
+            <!-- Header -->
+            <header class="chat-header">
+                <div class="header-content">
+                    <div class="bot-info">
+                        <h2 class="bot-name">Twinkle Bot</h2>
+                        <div class="bot-status">
+                            <span class="status-dot"></span>
+                            <span class="status-text">Online</span>
+                        </div>
+                    </div>
+                    <button id="back-btn" class="icon-button" aria-label="Go back">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Chat Messages Area -->
+            <main class="chat-messages" id="chat-messages">
+                <!-- Welcome message -->
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <p>Hello! I'm your AI assistant. I can help you with various tasks including logistics, inventory management, warehousing, and restocking. How can I assist you today?</p>
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </main>
+
+            <!-- Typing Indicator -->
+            <div id="typing-indicator" class="typing-indicator hidden">
+                <div class="message bot-message">
+                    <div class="message-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="message-content">
+                        <div class="typing-container">
+                            <span class="typing-text">Twinkle Bot is typing...</span>
+                            <div class="typing-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input Area -->
+            <footer class="chat-input-area">
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            id="message-input" 
+                            class="message-input" 
+                            placeholder="Ask me something..."
+                            aria-label="Type your message"
+                        >
+                        <button id="send-btn" class="send-button" aria-label="Send message">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner">
+            <i class="fas fa-spinner fa-spin"></i>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
