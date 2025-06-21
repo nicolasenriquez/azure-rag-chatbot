@@ -1,0 +1,29 @@
+fastapi
+uvicorn
+pydantic
+pydantic-settings
+python-multipart
+httpx
+aiofiles
+
+# Azure AI Services
+azure-ai-textanalytics
+azure-search-documents
+azure-storage-blob
+azure-identity
+openai
+
+# LangChain for RAG
+langchain
+langchain-openai
+langchain-community
+
+# Database
+sqlalchemy
+alembic
+psycopg2-binary
+
+# Utilities
+python-dotenv
+Pillow
+requests
